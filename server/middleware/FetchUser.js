@@ -2,15 +2,12 @@ const axios = require("axios");
 
 const FetchUser = (req, res, next) => {
   const { username } = req.params;
-  //   console.log(username);
+  console.log(username);
   axios
     .get(`https://api.github.com/users/${username}`)
     .then((res) => {
-        
       // get all followers user
-      let followers = GetFollowers(res.data.followers_url);
 
-      req.body.following_url = res.data.following_url;
       const data = {
         username: res.data.login,
         location: res.data.location,
@@ -23,26 +20,34 @@ const FetchUser = (req, res, next) => {
         created_at: res.data.created_at,
       };
       req.body.data = data;
+
+      req.body.following_url = res.data.following_url;
+      GetFollowers(req, next, res.data.login, res.data.followers_url);
+
       next();
     })
     .catch((err) => {
-      res.status(400).send({ message: "something is wrong" });
+      res.status(403).send({ message: "something is wrong" });
     });
 };
 
 module.exports = FetchUser;
 
-// separe function
-
 // get followers
-function GetFollowers(url) {
-  axios.get(url).then((res) => {
+function GetFollowers(req, next, name, url) {
+  let dsa = axios.get(url).then((res) => {
     let data = res.data.map((el) => {
-      return el.login;
+      //   FriendOrNot(req, next, name, el.followers_url);
     });
-
-    return data;
+    // next();
   });
 }
 
-// get following
+// check isFriend or not
+
+// function FriendOrNot(req, next, name, url) {
+//   axios(url).then((res) => {
+//     // console.log(res.data);
+//   });
+//   next();
+// }
