@@ -5,6 +5,7 @@ const CheckUserPresent = require("../middleware/checkPresent");
 const FetchUser = require("../middleware/FetchUser");
 const FindFriends = require("../middleware/findFriends");
 const DeleteData = require("../middleware/deleteData");
+const UpdateData = require("../middleware/updateData");
 
 UserRoute.get(
   "/:username",
@@ -21,7 +22,7 @@ UserRoute.delete("/:username", DeleteData, (req, res) => {
   res.status(404).send({ message: "data deleted from database" });
 });
 
-UserRoute.patch("/", (req, res) => {
+UserRoute.patch("/:username", UpdateData, (req, res) => {
   res.send("hi");
 });
 module.exports = UserRoute;
