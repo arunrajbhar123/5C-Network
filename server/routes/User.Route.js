@@ -6,10 +6,9 @@ const FetchUser = require("../middleware/FetchUser");
 const FindFriends = require("../middleware/findFriends");
 const DeleteData = require("../middleware/deleteData");
 const UpdateData = require("../middleware/updateData");
-const SortData=require('../middleware/sortData')
+const SortData = require("../middleware/sortData");
 
-UserRoute.get("/", SortData,(req, res) => {
-  
+UserRoute.get("/", SortData, (req, res) => {
   res.send("hi");
 });
 
@@ -19,8 +18,8 @@ UserRoute.get(
   FetchUser,
   FindFriends,
   (req, res) => {
-    const { data } = req.body;
-    res.status(201).send({ message: "data Save", data: data });
+    const data = req.body;
+    res.status(201).send({ message: "data Save", data });
   }
 );
 

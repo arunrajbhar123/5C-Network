@@ -12,8 +12,9 @@ const UpdateData = async (req, res, next) => {
       },
     }
   );
-  if (!data.acknowledged) {
-    return res.send({ message: "data not exits or data not update" });
+
+  if (data.modifiedCount == 0) {
+    return res.send({ message: "data is already updated" });
   }
   next();
 };
