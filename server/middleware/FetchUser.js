@@ -17,27 +17,30 @@ const FetchUser = (req, res, next) => {
         followers: res.data.followers,
         created_at: res.data.created_at,
       };
-      req.body.data = data;
-      req.body.following_url = res.data.following_url;
-      let following = [];
-      let friends = [];
+      req.body = data;
+      var following = [];
+      var followers = [];
+    
       callbackFollowing(res.data.following_url.split("{")[0]).then((res) => {
         following = res;
       });
 
       callbackFollower(res.data.followers_url).then((res) => {
         // console.log(res,'follower');
-        for (let i = 0; i < res?.length; i++) {
-          for (let j = 0; j < following?.length; j++) {
-            if (res[i] == following[j]) {
-              friends.push(res[i]);
-              break;
-            }
+        followers = res;
+      });
+      var friends = [];
+      for (let i = 0; i < res?.length; i++) {
+        for (let j = 0; j < following?.length; j++) {
+          if (res[i] == following[j]) {
+            friends.push(res[i]);
+          
+            break;
           }
         }
-    
-      });
-console.log(friends);
+      }
+     
+      req.body.friends = friends;
       next();
     })
     .catch((err) => {
