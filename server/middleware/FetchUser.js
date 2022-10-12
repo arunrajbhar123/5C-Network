@@ -6,6 +6,11 @@ const FetchUser = (req, res, next) => {
   axios
     .get(`https://api.github.com/users/${username}`)
     .then((res) => {
+        
+      // get all followers user
+      let followers = GetFollowers(res.data.followers_url);
+
+      req.body.following_url = res.data.following_url;
       const data = {
         username: res.data.login,
         location: res.data.location,
@@ -16,13 +21,28 @@ const FetchUser = (req, res, next) => {
         following: res.data.following,
         followers: res.data.followers,
         created_at: res.data.created_at,
-       
       };
+      req.body.data = data;
+      next();
     })
     .catch((err) => {
       res.status(400).send({ message: "something is wrong" });
     });
-  res.send("fetch data");
 };
 
 module.exports = FetchUser;
+
+// separe function
+
+// get followers
+function GetFollowers(url) {
+  axios.get(url).then((res) => {
+    let data = res.data.map((el) => {
+      return el.login;
+    });
+
+    return data;
+  });
+}
+
+// get following
