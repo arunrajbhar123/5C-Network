@@ -6,6 +6,12 @@ const FetchUser = require("../middleware/FetchUser");
 const FindFriends = require("../middleware/findFriends");
 const DeleteData = require("../middleware/deleteData");
 const UpdateData = require("../middleware/updateData");
+const SortData=require('../middleware/sortData')
+
+UserRoute.get("/", SortData,(req, res) => {
+  
+  res.send("hi");
+});
 
 UserRoute.get(
   "/:username",
@@ -23,6 +29,6 @@ UserRoute.delete("/:username", DeleteData, (req, res) => {
 });
 
 UserRoute.patch("/:username", UpdateData, (req, res) => {
-  res.send("hi");
+  res.send({ message: "data updated" });
 });
 module.exports = UserRoute;
