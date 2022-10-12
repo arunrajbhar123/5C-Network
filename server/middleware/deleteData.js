@@ -4,7 +4,7 @@ const DeleteData = async (req, res, next) => {
   const Data = await UserModel.deleteOne({ username });
 
   if (Data.deletedCount == 0) {
-    return res.send({ message: "data is not exist" });
+    return res.status(404).send({ message: "data is not exist" });
   }
   next();
 };

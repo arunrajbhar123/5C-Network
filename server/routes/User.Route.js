@@ -24,7 +24,7 @@ UserRoute.get(
 );
 
 UserRoute.delete("/:username", DeleteData, (req, res) => {
-  res.status(404).send({ message: "data deleted from database" });
+  res.status(410).send({ message: "data deleted from database" });
 });
 
 UserRoute.patch("/:username", UpdateData, (req, res) => {
