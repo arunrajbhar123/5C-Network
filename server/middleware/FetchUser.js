@@ -19,7 +19,25 @@ const FetchUser = (req, res, next) => {
       };
       req.body.data = data;
       req.body.following_url = res.data.following_url;
-console.log(callback(res.data.following_url));
+      let following = [];
+      let friends = [];
+      callbackFollowing(res.data.following_url.split("{")[0]).then((res) => {
+        following = res;
+      });
+
+      callbackFollower(res.data.followers_url).then((res) => {
+        // console.log(res,'follower');
+        for (let i = 0; i < res?.length; i++) {
+          for (let j = 0; j < following?.length; j++) {
+            if (res[i] == following[j]) {
+              friends.push(res[i]);
+              break;
+            }
+          }
+        }
+    
+      });
+console.log(friends);
       next();
     })
     .catch((err) => {
@@ -29,10 +47,14 @@ console.log(callback(res.data.following_url));
 
 module.exports = FetchUser;
 
+function callbackFollowing(url) {
+  return axios.get(url).then((res) => {
+    return res.data.map((el) => el.login);
+  });
+}
 
-
-function callback(url){
-return axios.get(url).then((res)=>{
-
-})
+function callbackFollower(url) {
+  return axios.get(url).then((res) => {
+    return res.data.map((el) => el.login);
+  });
 }
