@@ -7,7 +7,7 @@ const FetchUser = async (req, res, next) => {
     .get(`https://api.github.com/users/${username}`)
     .then((res) => {
       const data = {
-        username: res.data.login,
+        username: res.data.login.toLowerCase(),
         location: res.data.location,
         blog: res.data.blog,
         bio: res.data.bio,
@@ -27,9 +27,19 @@ const FetchUser = async (req, res, next) => {
 
       callbackFollower(res.data.followers_url).then((res) => {
         followers = res;
-      });
-      req.body.friends = friends;
 
+        let friends = [];
+        for (let i = 0; i < following?.length; i++) {
+          for (let j = 0; j < followers?.length; j++) {
+            if (following[i] == followers[j]) {
+              friends.push(following[i]);
+              break;
+            }
+          }
+        }
+        req.body.friends = friends;
+        console.log(req.body);
+      });
       next();
     })
 

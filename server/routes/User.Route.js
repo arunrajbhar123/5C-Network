@@ -19,7 +19,8 @@ UserRoute.get(
   FindFriends,
   (req, res) => {
     const data = req.body;
-    res.status(201).send({ message: "data Save", data });
+ 
+    res.status(201).send(data);
   }
 );
 
