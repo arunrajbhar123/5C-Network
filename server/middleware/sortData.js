@@ -2,7 +2,6 @@ const UserModel = require("../model/user.model");
 const SortData = async (req, res, next) => {
   const { sortby } = req.query;
 
-  console.log(sortby);
   var data;
   if (sortby == "followers") {
     data = await UserModel.find({}, { __v: 0, _id: 0 }).sort({ followers: 1 });
@@ -16,11 +15,10 @@ const SortData = async (req, res, next) => {
     data = await UserModel.find({}, { __v: 0, _id: 0 }).sort({
       public_repos: 1,
     });
-  } else if(sortby=="created_at"){
+  } else if (sortby == "created_at") {
     data = await UserModel.find({}, { __v: 0, _id: 0 }).sort({ created_at: 1 });
-  }else{
+  } else {
     data = await UserModel.find({}, { __v: 0, _id: 0 });
-
   }
 
   res.send(data);

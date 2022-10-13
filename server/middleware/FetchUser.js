@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const FetchUser = (req, res, next) => {
+const FetchUser = async (req, res, next) => {
   const { username } = req.params;
 
   axios
@@ -20,31 +20,21 @@ const FetchUser = (req, res, next) => {
       req.body = data;
       var following = [];
       var followers = [];
-    
+
       callbackFollowing(res.data.following_url.split("{")[0]).then((res) => {
         following = res;
       });
 
       callbackFollower(res.data.followers_url).then((res) => {
-        // console.log(res,'follower');
         followers = res;
       });
-      var friends = [];
-      for (let i = 0; i < res?.length; i++) {
-        for (let j = 0; j < following?.length; j++) {
-          if (res[i] == following[j]) {
-            friends.push(res[i]);
-          
-            break;
-          }
-        }
-      }
-     
       req.body.friends = friends;
+
       next();
     })
+
     .catch((err) => {
-      res.status(403).send({ message: "something is wrong" });
+      res.send({ message: "something is wrong user not found" });
     });
 };
 
